@@ -15,6 +15,10 @@ class App extends Component {
     };
   };
 
+  handleChange = (e) => this.setState({'searchField': e.target.value});
+  handleSearchTerm = (item, term) => item.name.toLowerCase().includes(term.toLowerCase());
+  filterMonsters = (monsters, searchField) => monsters.filter(monster => this.handleSearchTerm(monster, searchField));
+
   componentDidMount() {
       fetch('https://jsonplaceholder.typicode.com/users')
       .then(res => res.json()
@@ -23,11 +27,12 @@ class App extends Component {
 
   render() {
     const {monsters, searchField} = this.state;
-    const filteredMonsters = monsters.filter(monster => monster.name.toLowerCase().includes(searchField.toLowerCase()));
+    const filteredMonsters = this.filterMonsters(monsters, searchField);
 
     return (
       <div className="App">
-        <SearchBox placeholder={'Search Monster'} handleChange={e => this.setState({'searchField': e.target.value})} />
+        <h1>React-M Codex</h1>
+        <SearchBox placeholder={'Search Monster'} handleChange={this.handleChange} />
         <CardList monsters={filteredMonsters} />
       </div>
     );
